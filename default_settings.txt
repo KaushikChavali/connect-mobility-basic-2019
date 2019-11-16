@@ -1,5 +1,5 @@
 Scenario.name = MyScenario
-Scenario.endTime = 6000
+Scenario.endTime = 2880
 Scenario.updateInterval = 0.1
 Scenario.simulateConnections = false
 MovementModel.worldSize = 1000,1000

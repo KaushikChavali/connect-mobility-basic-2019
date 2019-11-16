@@ -2,6 +2,9 @@ package movement;
 
 import core.Coord;
 import core.Settings;
+import core.SimClock;
+import core.SimScenario;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -76,24 +79,32 @@ public class MultiState extends MovementModel {
 
     class WaypointTable {
 
-        private int[][] probs;
 
-        public WaypointTable(){
-            probs = new int[][]{ //follows the table in note
-                    { 0, 10, 10, 70, 10, 5 },
-                    { 10, 1, 9, 70, 10, 5 },
-                    { 10, 5, 70, 10, 5, 5 },
-                    { 1, 1, 1, 95, 2,  5 },
-                    { 4, 1, 4, 7, 84, 5 },
-                    { 10, 3, 10, 42, 3, 32 }
-            };
-        }
-        public double getProbTo(State from, State to) {
-            return this.probs[from.getNumVal()][to.getNumVal()];
-        }
+        public WaypointTable(){ }
 
-        public void updateNoon(){
+        public int[][] getProb(){
+           // System.out.println(SimClock.getTime());
+            int time = SimClock.getIntTime();
 
+            System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
+            if (time < ( SimScenario.getInstance().getEndTime() / 2))
+                return new int[][]{ //follows the table in note
+                        { 0, 10, 10, 70, 10, 5 },
+                        { 10, 1, 9, 70, 10, 5 },
+                        { 10, 5, 70, 10, 5, 5 },
+                        { 1, 1, 1, 95, 2,  5 },
+                        { 4, 1, 4, 7, 84, 5 },
+                        { 10, 3, 10, 42, 3, 32 } };
+            else {
+                System.out.println("using afternoon time");
+                return new int[][]{ //follows the table in note
+                        { 0, 5, 5, 39, 5, 57},
+                        { 6, 1, 6, 46, 10,  66},
+                        { 6, 3, 46, 6, 3, 66 },
+                        { 1, 1, 1, 72, 2,  76 },
+                        { 1, 1, 1, 1, 75, 9 },
+                        { 14, 4, 19, 39, 19, 95 } };
+            }
         }
 
         public State getNextState(State currentState){
@@ -105,7 +116,7 @@ public class MultiState extends MovementModel {
 //            }
             int maxLength = currentState.equals(State.ENTRANCE)? State.values().length: State.values().length - 1;
             for(int i = 0; i < maxLength; i++){
-                for (int j = 0; j < this.probs[currentState.getNumVal()][i]; j++){
+                for (int j = 0; j < this.getProb()[currentState.getNumVal()][i]; j++){
                     temp.add(State.values()[i]);
                 }
             }
