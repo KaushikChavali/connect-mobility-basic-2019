@@ -23,9 +23,17 @@ extends MovementModel {
   //==========================================================================//
 
 
+  //customization for TUM informatik
+
+
+
+  //==========================================================================//
+
   //==========================================================================//
   // Implementation
   //==========================================================================//
+
+
   @Override
   public Path getPath() {
     // Update state machine every time we pick a path
@@ -35,10 +43,10 @@ extends MovementModel {
     final Path p;
     p = new Path( generateSpeed() );
     p.addWaypoint( lastWaypoint.clone() );
-
     final Coord c = this.randomCoord();
     p.addWaypoint( c );
 
+    System.out.println("new way point: " + p);
     this.lastWaypoint = c;
     return p;
   }
@@ -63,6 +71,8 @@ extends MovementModel {
     }
     return new Coord( x, rng.nextDouble() * super.getMaxY());
   }
+
+
   //==========================================================================//
 
 
