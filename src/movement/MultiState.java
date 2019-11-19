@@ -7,8 +7,6 @@ import core.SimScenario;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 
 public class MultiState extends MovementModel {
 
@@ -35,7 +33,7 @@ public class MultiState extends MovementModel {
         this.lastWaypoint = c;
         return p;
     }
-
+    
     @Override
     public Coord getInitialLocation() {
         this.lastWaypoint = this.waypointTable.getCoordFromState(State.ENTRANCE);
@@ -82,19 +80,19 @@ public class MultiState extends MovementModel {
 
         // TODO further improve the efficiency
         private int morning[][] = { //follows the table in note
-                { 0, 10, 10, 70, 10, 5 },
-                { 10, 1, 9, 70, 10, 5 },
-                { 10, 5, 70, 10, 5, 5 },
-                { 1, 1, 1, 95, 2,  5 },
-                { 4, 1, 4, 7, 84, 5 },
-                { 10, 3, 10, 42, 3, 32 } };
+            { 0, 10, 10, 70, 10, 5 },
+            { 10, 1, 9, 70, 10, 5 },
+            { 10, 5, 70, 10, 5, 5 },
+            { 1, 1, 1, 95, 2,  5 },
+            { 4, 1, 4, 7, 84, 5 },
+            { 10, 3, 10, 42, 3, 32 } };
         private int afternoon[][] = {//follows the table in note
-                { 0, 5, 5, 39, 5, 57},
-                { 6, 1, 6, 46, 10,  66},
-                { 6, 3, 46, 6, 3, 66 },
-                { 1, 1, 1, 72, 2,  76 },
-                { 1, 1, 1, 1, 75, 9 },
-                { 14, 4, 19, 39, 19, 95 } };
+            { 0, 5, 5, 39, 5, 57},
+            { 6, 1, 6, 46, 10,  66},
+            { 6, 3, 46, 6, 3, 66 },
+            { 1, 1, 1, 72, 2,  76 },
+            { 1, 1, 1, 1, 75, 9 },
+            { 14, 4, 19, 39, 19, 95 } };
 
 
         public WaypointTable(){ }
@@ -116,7 +114,7 @@ public class MultiState extends MovementModel {
             // TODO further improve the efficiency z.B. precalculate total
             int total = 0;
             int probs[] = getProb(currentState.getNumVal());
-
+            
             for (int i = 0; i < State.values().length; i++)
                 total += probs[i];
 
@@ -126,9 +124,9 @@ public class MultiState extends MovementModel {
                 if (randomNumber < 0)
                     return State.values()[i];
             }
-
+            
             return State.values()[State.values().length-1];
-
+                
 
             /*ArrayList<State> temp = new ArrayList<State>();
 //            for(int probability: this.probs[currentState.getNumVal()]){

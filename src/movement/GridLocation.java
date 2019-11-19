@@ -7,6 +7,7 @@ package movement;
 import core.Coord;
 import core.Settings;
 import core.SimScenario;
+import routing.util.RoutingInfo;
 
 /**
  * Location (movement) model that sets the nodes in a grid formation
@@ -46,6 +47,10 @@ public class GridLocation extends MovementModel {
 
 		this.rows = s.getInt(ROWS_S);
 		this.cols = (nodeCount / this.rows);
+
+		System.out.println("node Count: " + Integer.toString(nodeCount));
+
+		System.out.println("row: " + Integer.toString(this.rows));
 		this.startCoords = s.getCsvDoubles(LOCATION_S,2);
 		this.spacing = s.getInt(SPACING_S);
 		this.offset = s.getDouble(OFFSET_S, 0);
@@ -60,13 +65,16 @@ public class GridLocation extends MovementModel {
 	public GridLocation(GridLocation proto) {
 		super(proto);
 		double x,y;
-
+		System.out.println(proto);
+		System.out.println(proto.cols);
 		x = proto.startCoords[0] +
 			((proto.nodeCount) % proto.cols) * proto.spacing;
 		x += rng.nextDouble() * proto.offset;
 
+
 		y = proto.startCoords[1] +
 			((proto.nodeCount) / proto.cols) * proto.spacing;
+
 		y += rng.nextDouble() * proto.offset;
 
 		this.loc = new Coord(x,y);
