@@ -2,7 +2,7 @@
 
 Scenario.name = StatefulRwp
 Scenario.endTime = 6000
-Scenario.updateInterval = 0.1
+Scenario.updateInterval = 0.6
 Scenario.simulateConnections = false
 MovementModel.worldSize = 1000,1000
 Events.nrof = 0
@@ -16,7 +16,7 @@ myInterface.transmitSpeed = 0
 Scenario.nrofHostGroups = 1
 
 Group1.groupID = x
-Group1.nrofHosts = 1000
+Group1.nrofHosts = 500
 Group1.nrofInterfaces = 1
 Group1.interface1 = myInterface
 Group1.movementModel = MultiState
