@@ -144,12 +144,23 @@ public class MultiState extends MovementModel {
             return temp.get(new Random().nextInt(temp.size()));*/
         }
 
+        public Coord getClassroomCoord(){
+            int classroom[][] = {
+                    {890, 390},
+                    {220, 220},
+                    {410, 380},
+                    {780, 470}
+            };
+            int randC = ThreadLocalRandom.current().nextInt(0, 3 + 1);
+            return new Coord(ThreadLocalRandom.current().nextInt(classroom[randC][0], classroom[randC][0] + 20 + 1),ThreadLocalRandom.current().nextInt(classroom[randC][1], classroom[randC][1] + 20 + 1));
+        }
+
         public Coord getCoordFromState(State state) {
             switch (state) {
                 case CAFE: return new Coord(ThreadLocalRandom.current().nextInt(590, 610 + 1),ThreadLocalRandom.current().nextInt(390, 410 + 1));
                 case TOILET: return new Coord(ThreadLocalRandom.current().nextInt(740, 760 + 1),ThreadLocalRandom.current().nextInt(290, 310 + 1));
                 case LEISURE: return new Coord(ThreadLocalRandom.current().nextInt(500, 700 + 1),ThreadLocalRandom.current().nextInt(300, 330 + 1));
-                case CLASSROOM: return new Coord(ThreadLocalRandom.current().nextInt(890, 910 + 1),ThreadLocalRandom.current().nextInt(390, 410 + 1));
+                case CLASSROOM: return getClassroomCoord();
                 case LIBRARY: return new Coord(ThreadLocalRandom.current().nextInt(290, 350 + 1),ThreadLocalRandom.current().nextInt(290, 310 + 1));
                 default: return new Coord(ThreadLocalRandom.current().nextInt(800, 825 + 1),ThreadLocalRandom.current().nextInt(315, 335 + 1));
             }
