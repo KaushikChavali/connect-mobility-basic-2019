@@ -40,11 +40,21 @@ public class MultiState extends MovementModel {
         //final double blockTime = curTime % 1500;        
         
         // Update state machine every time we pick a path
-        
-        if ((this.state == State.CLASSROOM && curTime < 375 
-                || curTime > 2625 && curTime < 3375 || curTime > 5625) // If lecture over
-                || this.state.getTime() == 0) { // If time's up 
 
+        if (this.state == State.CLASSROOM) { 
+            if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
+                this.state = waypointTable.getNextState(this.state);
+                System.out.println("going to: " + this.state);
+
+                // Create the path
+                p.addWaypoint(lastWaypoint.clone());
+                final Coord c = waypointTable.getCoordFromState(this.state);
+                p.addWaypoint(c);
+                this.lastWaypoint = c;
+            }
+
+        } else if ( this.state.getTime() == 0) { // If time's up 
+                
             this.state = waypointTable.getNextState(this.state);
             System.out.println("going to: " + this.state);
         
