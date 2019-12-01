@@ -23,20 +23,40 @@ public class MultiState extends MovementModel {
     public Path getPath() {
         Path p;
         p = new Path(generateSpeed());
+        
+        //Variable pause time implementation
+        final double curTime = SimClock.getTime();
+        //final double endTime = SimScenario.getInstance().getEndTime();
+ 
+        //Timetable for pause time (Repeats every hour)
+        //Scenario Time: 6000
+        //Classroom: 10:15-11:45
+        //Cafe: 10:10-10:20 and 10:40-10:50
+        //Toilet: None
+        //Leisure: 10:10-10:30 and 10:40-11:00
+        //Library: 10:00-10:20 and 10:30-10:50
+ 
+        //blockTime of 1 hour, i.e., 1500
+        //final double blockTime = curTime % 1500;        
+        
         // Update state machine every time we pick a path
-        if (this.state.getTime() == 0) {
+        
+        if ((this.state == State.CLASSROOM && curTime < 375 
+                || curTime > 2625 && curTime < 3375 || curTime > 5625) // If lecture over
+                || this.state.getTime() == 0) { // If time's up 
+
             this.state = waypointTable.getNextState(this.state);
             System.out.println("going to: " + this.state);
+        
             // Create the path
             p.addWaypoint(lastWaypoint.clone());
             final Coord c = waypointTable.getCoordFromState(this.state);
             p.addWaypoint(c);
             this.lastWaypoint = c;
+       
         } else {
             this.state.cutTime();
-
             p.addWaypoint(lastWaypoint.clone());
-
         }
         return p;
     }
@@ -83,11 +103,10 @@ public class MultiState extends MovementModel {
             return this.time;
         }
         public void cutTime(){
-            if (this.time < 0){
+            if (this.time <= 0)
                 this.time = getInterval();
-            } else {
-                this.time = this.time - 1;
-            }
+            else 
+                this.time--;            
         }
 
         public int getInterval() {
@@ -95,7 +114,7 @@ public class MultiState extends MovementModel {
                 case 0: return 10000; //10 minutes
                 case 1: return 10000; //10 minutes
                 case 2: return 20000;
-                case 3: return 90000; //90 minutes
+                case 3: return 90000; //90 minutes UNUSED
                 case 4: return 60000; //60 minutes
                 default: return 10000;
             }
