@@ -21,17 +21,23 @@ public class MultiState extends MovementModel {
 
     @Override
     public Path getPath() {
-        // Update state machine every time we pick a path
-        this.state = waypointTable.getNextState(this.state);
-        System.out.println("going to: " + this.state);
-        // Create the path
         Path p;
-        p = new Path( generateSpeed() );
-        p.addWaypoint( lastWaypoint.clone() );
-        final Coord c = waypointTable.getCoordFromState(this.state);
-        p.addWaypoint( c );
+        p = new Path(generateSpeed());
+        // Update state machine every time we pick a path
+        if (this.state.getTime() == 0) {
+            this.state = waypointTable.getNextState(this.state);
+            System.out.println("going to: " + this.state);
+            // Create the path
+            p.addWaypoint(lastWaypoint.clone());
+            final Coord c = waypointTable.getCoordFromState(this.state);
+            p.addWaypoint(c);
+            this.lastWaypoint = c;
+        } else {
+            this.state.cutTime();
 
-        this.lastWaypoint = c;
+            p.addWaypoint(lastWaypoint.clone());
+
+        }
         return p;
     }
     
@@ -67,9 +73,32 @@ public class MultiState extends MovementModel {
     private enum State {
         CAFE(0), TOILET(1), LEISURE(2), CLASSROOM(3), LIBRARY(4), ENTRANCE(5);
         private int numVal;
+        private int time  = getInterval();
 
         State(int numVal) {
             this.numVal = numVal;
+        }
+
+        public int getTime(){
+            return this.time;
+        }
+        public void cutTime(){
+            if (this.time < 0){
+                this.time = getInterval();
+            } else {
+                this.time = this.time - 1;
+            }
+        }
+
+        public int getInterval() {
+            switch (numVal){
+                case 0: return 10000; //10 minutes
+                case 1: return 10000; //10 minutes
+                case 2: return 20000;
+                case 3: return 90000; //90 minutes
+                case 4: return 60000; //60 minutes
+                default: return 10000;
+            }
         }
 
         public int getNumVal() {
