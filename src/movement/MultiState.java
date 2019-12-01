@@ -51,7 +51,8 @@ public class MultiState extends MovementModel {
                 final Coord c = waypointTable.getCoordFromState(this.state);
                 p.addWaypoint(c);
                 this.lastWaypoint = c;
-            }
+            } else
+                p.addWaypoint(lastWaypoint.clone());
 
         } else if ( this.state.getTime() == 0) { // If time's up 
                 
