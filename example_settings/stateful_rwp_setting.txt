@@ -13,14 +13,23 @@ myInterface.transmitRange = 0
 myInterface.transmitSpeed = 0
 
 # Groups
-Scenario.nrofHostGroups = 1
+Scenario.nrofHostGroups = 2
 
+# Group of students
 Group1.groupID = x
-Group1.nrofHosts = 500
+Group1.nrofHosts = 490
 Group1.nrofInterfaces = 1
 Group1.interface1 = myInterface
 Group1.movementModel = MultiState
 Group1.router = PassiveRouter
+
+# Group of staff
+Group2.groupID = y
+Group2.nrofHosts = 10
+Group2.nrofInterfaces = 1
+Group2.interface1 = myInterface
+Group2.movementModel = MultiStateStaff
+Group2.router = PassiveRouter
 
 # Reports
 Report.nrofReports = 0
