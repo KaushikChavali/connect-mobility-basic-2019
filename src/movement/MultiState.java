@@ -41,6 +41,7 @@ public class MultiState extends MovementModel {
         
         // Update state machine every time we pick a path
 
+        // TODO Don't enter classroom between 10:30-11:45
         if (this.state == State.CLASSROOM) { 
             if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
                 this.state = waypointTable.getNextState(this.state);
@@ -139,20 +140,28 @@ public class MultiState extends MovementModel {
     class WaypointTable {
 
         // TODO further improve the efficiency
+        // CAFE(0), TOILET(1), LEISURE(2), CLASSROOM(3), LIBRARY(4), ENTRANCE(5);
+        private int earlyMorning[][] = { //follows the table in note
+            { 0, 10, 10, 70, 10, 5 },
+            { 1, 1, 10, 70, 10, 5 },
+            { 1, 5, 90, 5, 5, 5 },
+            { 1, 1, 1, 95, 2,  5 },
+            { 1, 1, 4, 7, 184, 5 },
+            { 1, 1, 5, 5, 2, 595 }};
         private int morning[][] = { //follows the table in note
             { 0, 10, 10, 70, 10, 5 },
-            { 10, 1, 9, 70, 10, 5 },
-            { 10, 5, 70, 10, 5, 5 },
+            { 1, 1, 9, 70, 10, 5 },
+            { 1, 1, 190, 5, 5, 5 },
             { 1, 1, 1, 95, 2,  5 },
-            { 4, 1, 4, 7, 84, 5 },
-            { 10, 3, 10, 42, 3, 32 } };
+            { 1, 1, 4, 7, 150, 5 },
+            { 5, 2, 7, 10, 2, 380 }};
         private int afternoon[][] = {//follows the table in note
             { 0, 5, 5, 39, 5, 57},
             { 6, 1, 6, 46, 10,  66},
-            { 6, 3, 46, 6, 3, 66 },
+            { 6, 3, 146, 6, 3, 20 },
             { 1, 1, 1, 72, 2,  76 },
             { 1, 1, 1, 1, 75, 9 },
-            { 14, 4, 19, 39, 19, 95 } };
+            { 1, 1, 19, 39, 19, 95 } };
 
 
         public WaypointTable(){ }
@@ -162,7 +171,9 @@ public class MultiState extends MovementModel {
             int time = SimClock.getIntTime();
 
             System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
-            if (time < ( SimScenario.getInstance().getEndTime() / 2))
+            if (time < 1500)
+                return earlyMorning[state];
+            else if (time < ( SimScenario.getInstance().getEndTime() / 2))
                 return morning[state];
             else {
                 System.out.println("using afternoon time");
@@ -187,20 +198,6 @@ public class MultiState extends MovementModel {
             
             return State.values()[State.values().length-1];
                 
-
-            /*ArrayList<State> temp = new ArrayList<State>();
-//            for(int probability: this.probs[currentState.getNumVal()]){
-//                for (int i = 0;i < probability; i++){
-//                    temp.add(State.values()[probability]);
-//                }
-//            }
-            int maxLength = currentState.equals(State.ENTRANCE)? State.values().length: State.values().length - 1;
-            for(int i = 0; i < maxLength; i++){
-                for (int j = 0; j < this.getProb()[currentState.getNumVal()][i]; j++){
-                    temp.add(State.values()[i]);
-                }
-            }
-            return temp.get(new Random().nextInt(temp.size()));*/
         }
 
         public Coord getClassroomCoord(){
