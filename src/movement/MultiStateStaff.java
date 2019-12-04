@@ -183,10 +183,12 @@ public class MultiStateStaff extends MovementModel {
         public Coord getOfficeCoord(){
             // TODO modify coordinate
             int office[][] = {
-                    {625, 220},
-                    {650, 425}
+                    {150, 150},
+                    {150, 150},
+                    {150, 150},
+                    {150, 150}
             };
-            int randC = ThreadLocalRandom.current().nextInt(0, 1 + 1);
+            int randC = ThreadLocalRandom.current().nextInt(0, 3 + 1);
             return new Coord(ThreadLocalRandom.current().nextInt(office[randC][0], office[randC][0] + 20 + 1),ThreadLocalRandom.current().nextInt(office[randC][1], office[randC][1] + 20 + 1));
         }
 
