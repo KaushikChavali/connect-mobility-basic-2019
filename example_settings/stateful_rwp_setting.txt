@@ -3,21 +3,21 @@
 Scenario.name = StatefulRwp
 Scenario.endTime = 6000
 Scenario.updateInterval = 1
-Scenario.simulateConnections = false
+Scenario.simulateConnections = true
 MovementModel.worldSize = 1000,1000
 Events.nrof = 0
 
 # Communication Interface
 myInterface.type = SimpleBroadcastInterface
-myInterface.transmitRange = 0
-myInterface.transmitSpeed = 0
+myInterface.transmitRange = 50
+myInterface.transmitSpeed = 1
 
 # Groups
 Scenario.nrofHostGroups = 2
 
 # Group of students
 Group1.groupID = x
-Group1.nrofHosts = 490
+Group1.nrofHosts = 90
 Group1.nrofInterfaces = 1
 Group1.interface1 = myInterface
 Group1.movementModel = MultiState
@@ -32,8 +32,9 @@ Group2.movementModel = MultiStateStaff
 Group2.router = PassiveRouter
 
 # Reports
-Report.nrofReports = 0
+Report.nrofReports = 1
 
+Report.report1 = ContactTimesReport
 Report.reportDir = reports
 
 
