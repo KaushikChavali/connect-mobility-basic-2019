@@ -13,10 +13,28 @@ public class MultiStateStaff extends MovementModel {
 
     private Coord lastWaypoint;
     private State state;
+    private int pauseTime;
     private WaypointTable waypointTable;
 
-    public State getState(){
+    private State getState(){
         return this.state;
+    }
+    
+    private void cutTime() {
+        if (this.pauseTime <= 0)
+            this.pauseTime = getInterval();
+        else 
+            this.pauseTime--;            
+    }
+
+    private int getInterval() {
+        switch (state.getNumVal()) {
+            case 0: return 100; //10 minutes
+            case 1: return 500; //5 minutes
+            case 2: return 200;
+            case 3: return 900; //90 minutes UNUSED
+            default: return 0;
+        }
     }
 
     @Override
@@ -27,16 +45,12 @@ public class MultiStateStaff extends MovementModel {
         //Variable pause time implementation
         final double curTime = SimClock.getTime();
  
-        //Timetable for pause time (Repeats every hour)
-        //Scenario Time: 6000
-        //Classroom: 10:15-11:45
-        
         // Update state machine every time we pick a path
 
-        // TODO
         if (this.state == State.OFFICE) { 
             if (curTime < 375 || curTime > 2625 && curTime < 3750 || curTime > 5625) { // If office time over
                 this.state = waypointTable.getNextState(this.state);
+                this.pauseTime = getInterval();
                 //System.out.println("going to: " + this.state);
 
                 // Create the path
@@ -47,9 +61,9 @@ public class MultiStateStaff extends MovementModel {
             } else
                 p.addWaypoint(lastWaypoint.clone());
 
-        } else if (this.state.getTime() == 0) { // If time's up 
-                
+        } else if (this.pauseTime == 0) { // If time's up 
             this.state = waypointTable.getNextState(this.state);
+            this.pauseTime = getInterval();
             //System.out.println("going to: " + this.state);
         
             // Create the path
@@ -59,7 +73,7 @@ public class MultiStateStaff extends MovementModel {
             this.lastWaypoint = c;
        
         } else {
-            this.state.cutTime();
+            this.cutTime();
             p.addWaypoint(lastWaypoint.clone());
         }
         return p;
@@ -92,6 +106,7 @@ public class MultiStateStaff extends MovementModel {
     public MultiStateStaff() {
         this.waypointTable = new WaypointTable();
         this.state = State.ENTRANCE;
+        this.pauseTime = 0;
     }
 
     private enum State {
@@ -101,28 +116,6 @@ public class MultiStateStaff extends MovementModel {
 
         State(int numVal) {
             this.numVal = numVal;
-        }
-
-        public int getTime(){
-            return this.time;
-        }
-        public void cutTime(){
-            if (this.time <= 0)
-                this.time = getInterval();
-            else 
-                this.time--;            
-            //System.out.println("cuttime:" + this.time);//
-        }
-
-        public int getInterval() {
-            switch (numVal) {
-                case 0: return 100; //10 minutes
-                case 1: return 500; //5 minutes
-                case 2: return 200;
-                case 3: return 900; //90 minutes UNUSED
-                //case 4: return 60000; //60 minutes
-                default: return 0;
-            }
         }
 
         public int getNumVal() {

@@ -24,9 +24,10 @@ public class MultiState extends MovementModel {
             this.pauseTime = getInterval();
         else 
             this.pauseTime--;            
-        System.out.println("cuttime:" + this.pauseTime);//
+        //System.out.println("cuttime:" + this.pauseTime);//
     }
 
+    // TODO Align the time!
     private int getInterval() {
         switch (state.getNumVal()) {
             case 0: return 100; //10 minutes
@@ -59,6 +60,8 @@ public class MultiState extends MovementModel {
         //final double blockTime = curTime % 1500;        
         
         // Update state machine every time we pick a path
+        
+        // TODO Align the time!
 
         if (this.state == State.CLASSROOM) { 
             if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
@@ -192,6 +195,7 @@ public class MultiState extends MovementModel {
 
             //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
             // TODO Don't enter classroom between 10:30-11:45
+            // TODO Align the time!
             if (time > 750 && time < 1500)
                 return earlyMorningNoClass[state];
             else if (time < 1500)
