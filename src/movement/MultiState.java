@@ -13,10 +13,30 @@ public class MultiState extends MovementModel {
 
     private Coord lastWaypoint;
     private State state;
+    private int pauseTime;
     private WaypointTable waypointTable;
 
     public State getState(){
         return this.state;
+    }
+    private void cutTime() {
+        if (this.pauseTime <= 0)
+            this.pauseTime = getInterval();
+        else 
+            this.pauseTime--;            
+        //System.out.println("cuttime:" + this.pauseTime);//
+    }
+
+    // TODO Align the time!
+    private int getInterval() {
+        switch (state.getNumVal()) {
+            case 0: return 100; //10 minutes
+            case 1: return 100; //10 minutes
+            case 2: return 200;
+            case 3: return 900; //90 minutes UNUSED
+            case 4: return 600; //60 minutes
+            default: return 0;
+        }
     }
 
     @Override
@@ -40,11 +60,14 @@ public class MultiState extends MovementModel {
         //final double blockTime = curTime % 1500;        
         
         // Update state machine every time we pick a path
+        
+        // TODO Align the time!
 
         if (this.state == State.CLASSROOM) { 
             if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
                 this.state = waypointTable.getNextState(this.state);
-                System.out.println("going to: " + this.state);
+                this.pauseTime = getInterval();
+                //System.out.println("Lecture is over, going to: " + this.state);
 
                 // Create the path
                 p.addWaypoint(lastWaypoint.clone());
@@ -54,10 +77,11 @@ public class MultiState extends MovementModel {
             } else
                 p.addWaypoint(lastWaypoint.clone());
 
-        } else if ( this.state.getTime() == 0) { // If time's up 
+        } else if (this.pauseTime == 0) { // If time's up 
                 
             this.state = waypointTable.getNextState(this.state);
-            System.out.println("going to: " + this.state);
+            this.pauseTime = getInterval();
+            //System.out.println("Time's up, going to: " + this.state);
         
             // Create the path
             p.addWaypoint(lastWaypoint.clone());
@@ -66,7 +90,7 @@ public class MultiState extends MovementModel {
             this.lastWaypoint = c;
        
         } else {
-            this.state.cutTime();
+            this.cutTime();
             p.addWaypoint(lastWaypoint.clone());
         }
         return p;
@@ -99,36 +123,15 @@ public class MultiState extends MovementModel {
     public MultiState(){
         this.waypointTable = new WaypointTable();
         this.state = State.ENTRANCE;
+        this.pauseTime = 0;
     }
 
     private enum State {
         CAFE(0), TOILET(1), LEISURE(2), CLASSROOM(3), LIBRARY(4), ENTRANCE(5);
         private int numVal;
-        private int time  = getInterval();
 
         State(int numVal) {
             this.numVal = numVal;
-        }
-
-        public int getTime(){
-            return this.time;
-        }
-        public void cutTime(){
-            if (this.time <= 0)
-                this.time = getInterval();
-            else 
-                this.time--;            
-        }
-
-        public int getInterval() {
-            switch (numVal){
-                case 0: return 10000; //10 minutes
-                case 1: return 10000; //10 minutes
-                case 2: return 20000;
-                case 3: return 90000; //90 minutes UNUSED
-                case 4: return 60000; //60 minutes
-                default: return 10000;
-            }
         }
 
         public int getNumVal() {
@@ -192,6 +195,7 @@ public class MultiState extends MovementModel {
 
             //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
             // TODO Don't enter classroom between 10:30-11:45
+            // TODO Align the time!
             if (time > 750 && time < 1500)
                 return earlyMorningNoClass[state];
             else if (time < 1500)
