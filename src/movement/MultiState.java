@@ -41,7 +41,6 @@ public class MultiState extends MovementModel {
         
         // Update state machine every time we pick a path
 
-        // TODO Don't enter classroom between 10:30-11:45
         if (this.state == State.CLASSROOM) { 
             if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
                 this.state = waypointTable.getNextState(this.state);
@@ -141,6 +140,13 @@ public class MultiState extends MovementModel {
 
         // TODO further improve the efficiency
         // CAFE(0), TOILET(1), LEISURE(2), CLASSROOM(3), LIBRARY(4), ENTRANCE(5);
+        private int earlyMorningNoClass[][] = { //follows the table in note
+            { 0, 10, 10, 0, 10, 5 },
+            { 1, 1, 10, 0, 10, 5 },
+            { 1, 5, 90, 0, 5, 5 },
+            { 1, 1, 1, 0, 2,  5 },
+            { 1, 1, 4, 0, 184, 5 },
+            { 1, 1, 5, 0, 2, 595 }};
         private int earlyMorning[][] = { //follows the table in note
             { 0, 10, 10, 70, 10, 5 },
             { 1, 1, 10, 70, 10, 5 },
@@ -148,6 +154,13 @@ public class MultiState extends MovementModel {
             { 1, 1, 1, 95, 2,  5 },
             { 1, 1, 4, 7, 184, 5 },
             { 1, 1, 5, 5, 2, 595 }};
+        private int morningNoClass[][] = { //follows the table in note
+            { 0, 10, 10, 0, 10, 5 },
+            { 1, 1, 9, 0, 10, 5 },
+            { 1, 1, 190, 0, 5, 5 },
+            { 1, 1, 1, 0, 2,  5 },
+            { 1, 1, 4, 0, 150, 5 },
+            { 5, 2, 7, 0, 2, 380 }};
         private int morning[][] = { //follows the table in note
             { 0, 10, 10, 70, 10, 5 },
             { 1, 1, 9, 70, 10, 5 },
@@ -155,6 +168,13 @@ public class MultiState extends MovementModel {
             { 1, 1, 1, 95, 2,  5 },
             { 1, 1, 4, 7, 150, 5 },
             { 5, 2, 7, 10, 2, 380 }};
+        private int afternoonNoClass[][] = {//follows the table in note
+            { 0, 5, 5, 0, 5, 57},
+            { 6, 1, 6, 0, 10,  66},
+            { 6, 3, 146, 0, 3, 20 },
+            { 1, 1, 1, 0, 2,  76 },
+            { 1, 1, 1, 0, 75, 9 },
+            { 1, 1, 19, 0, 19, 95 } };
         private int afternoon[][] = {//follows the table in note
             { 0, 5, 5, 39, 5, 57},
             { 6, 1, 6, 46, 10,  66},
@@ -170,13 +190,16 @@ public class MultiState extends MovementModel {
             // System.out.println(SimClock.getTime());
             int time = SimClock.getIntTime();
 
-            System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
-            if (time < 1500)
+            //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
+            // TODO Don't enter classroom between 10:30-11:45
+            if (time > 750 && time < 1500)
+                return earlyMorningNoClass[state];
+            else if (time < 1500)
                 return earlyMorning[state];
             else if (time < ( SimScenario.getInstance().getEndTime() / 2))
                 return morning[state];
             else {
-                System.out.println("using afternoon time");
+                //System.out.println("using afternoon time");
                 return afternoon[state];
             }
         }
