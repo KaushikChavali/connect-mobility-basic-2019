@@ -2,7 +2,7 @@
 
 Scenario.name = StatefulRwp
 Scenario.endTime = 6000
-Scenario.updateInterval = 0.6
+Scenario.updateInterval = 1
 Scenario.simulateConnections = false
 MovementModel.worldSize = 1000,1000
 Events.nrof = 0

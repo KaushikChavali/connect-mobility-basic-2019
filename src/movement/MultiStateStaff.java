@@ -37,7 +37,7 @@ public class MultiStateStaff extends MovementModel {
         if (this.state == State.OFFICE) { 
             if (curTime < 375 || curTime > 2625 && curTime < 3750 || curTime > 5625) { // If office time over
                 this.state = waypointTable.getNextState(this.state);
-                System.out.println("going to: " + this.state);
+                //System.out.println("going to: " + this.state);
 
                 // Create the path
                 p.addWaypoint(lastWaypoint.clone());
@@ -47,10 +47,10 @@ public class MultiStateStaff extends MovementModel {
             } else
                 p.addWaypoint(lastWaypoint.clone());
 
-        } else if ( this.state.getTime() == 0) { // If time's up 
+        } else if (this.state.getTime() == 0) { // If time's up 
                 
             this.state = waypointTable.getNextState(this.state);
-            System.out.println("going to: " + this.state);
+            //System.out.println("going to: " + this.state);
         
             // Create the path
             p.addWaypoint(lastWaypoint.clone());
@@ -97,7 +97,7 @@ public class MultiStateStaff extends MovementModel {
     private enum State {
         CAFE(0), TOILET(1), LEISURE(2), OFFICE(3), ENTRANCE(4);
         private int numVal;
-        private int time  = getInterval();
+        private int time  = 0;
 
         State(int numVal) {
             this.numVal = numVal;
@@ -111,16 +111,17 @@ public class MultiStateStaff extends MovementModel {
                 this.time = getInterval();
             else 
                 this.time--;            
+            //System.out.println("cuttime:" + this.time);//
         }
 
         public int getInterval() {
-            switch (numVal){
-                case 0: return 10000; //10 minutes
-                case 1: return 5000; //5 minutes
-                case 2: return 20000;
-                case 3: return 90000; //90 minutes UNUSED
+            switch (numVal) {
+                case 0: return 100; //10 minutes
+                case 1: return 500; //5 minutes
+                case 2: return 200;
+                case 3: return 900; //90 minutes UNUSED
                 //case 4: return 60000; //60 minutes
-                default: return 10000;
+                default: return 0;
             }
         }
 
