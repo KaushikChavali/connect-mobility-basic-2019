@@ -224,9 +224,9 @@ public class MultiState extends MovementModel {
         public Coord getClassroomCoord(){
             int classroom[][] = {
                     {890, 390},
+                    {890, 390},
                     {220, 220},
-                    {410, 380},
-                    {780, 470}
+                    {410, 380}
             };
             int randC = ThreadLocalRandom.current().nextInt(0, 3 + 1);
             return new Coord(ThreadLocalRandom.current().nextInt(classroom[randC][0], classroom[randC][0] + 20 + 1),ThreadLocalRandom.current().nextInt(classroom[randC][1], classroom[randC][1] + 20 + 1));
