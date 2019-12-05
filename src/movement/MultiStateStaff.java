@@ -125,7 +125,7 @@ public class MultiStateStaff extends MovementModel {
 
     class WaypointTable {
 
-        // TODO further improve the efficiency
+        // todo further improve the efficiency
         // CAFE(0), TOILET(1), LEISURE(2), OFFICE(3), ENTRANCE(4);
         private int morning[][] = { //follows the table in note
             { 0, 10, 5, 80, 5 },
@@ -156,7 +156,7 @@ public class MultiStateStaff extends MovementModel {
         }
 
         public State getNextState(State currentState) {
-            // TODO further improve the efficiency z.B. precalculate total
+            // todo further improve the efficiency z.B. precalculate total
             int total = 0;
             int probs[] = getProb(currentState.getNumVal());
             

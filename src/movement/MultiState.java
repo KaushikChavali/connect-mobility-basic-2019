@@ -27,16 +27,15 @@ public class MultiState extends MovementModel {
         //System.out.println("cuttime:" + this.pauseTime);//
     }
 
-    // TODO Align the time!
-    //DONE. VERIFY!
     //10 minutes equals 250 time units in the simulation
+    //5 minutes equals 1 time unit in the simulation
     private int getInterval() {
         switch (state.getNumVal()) {
-            case 0: return 250; //CAFE 10 minutes
-            case 1: return 250; //TOILET 10 minutes
-            case 2: return 500; //LEISURE 20 minutes
-            case 3: return 4500; //CLASSROOM 90 minutes UNUSED
-            case 4: return 750; //LIBRARY 30 minutes
+            case 0: return 2; //CAFE 10 minutes
+            case 1: return 2; //TOILET 10 minutes
+            case 2: return 4; //LEISURE 20 minutes
+            case 3: return 18; //CLASSROOM 90 minutes UNUSED
+            case 4: return 6; //LIBRARY 30 minutes
             default: return 0;
         }
     }
@@ -44,30 +43,17 @@ public class MultiState extends MovementModel {
     @Override
     public Path getPath() {
         Path p;
-        p = new Path(generateSpeed());
+        p = new Path(100*generateSpeed());
         
-        //Variable pause time implementation
         final double curTime = SimClock.getTime();
-        //final double endTime = SimScenario.getInstance().getEndTime();
- 
-        //Timetable for pause time (Repeats every hour)
-        //Scenario Time: 6000
-        //Classroom: 10:15-11:45
-        //Cafe: 10:10-10:20 and 10:40-10:50
-        //Toilet: None
-        //Leisure: 10:10-10:30 and 10:40-11:00
-        //Library: 10:00-10:20 and 10:30-10:50
- 
-        //blockTime of 1 hour, i.e., 1500
-        //final double blockTime = curTime % 1500;        
-        
-        // Update state machine every time we pick a path
-        
-        // TODO Align the time!
-        //DONE. VERIFY!
+        // Simulation time 08:00-18:00
+        // Each time unit = 5 minutes
 
         if (this.state == State.CLASSROOM) { 
-            if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
+            //if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
+            // If lecture is over -0815 or 0945-1015 or 1145-1215 or 1345-1415 or 1545-1615 or 1745-
+            if (curTime < 3 || curTime >= 21 && curTime < 27 || curTime >= 45 && curTime < 51
+                    || curTime >= 69 && curTime < 75 || curTime >= 93 && curTime < 99 || curTime >= 117) {
                 this.state = waypointTable.getNextState(this.state);
                 this.pauseTime = getInterval();
                 //System.out.println("Lecture is over, going to: " + this.state);
@@ -144,47 +130,47 @@ public class MultiState extends MovementModel {
 
     class WaypointTable {
 
-        // TODO further improve the efficiency
+        // todo further improve the efficiency
         // CAFE(0), TOILET(1), LEISURE(2), CLASSROOM(3), LIBRARY(4), ENTRANCE(5);
         private int earlyMorningNoClass[][] = { //follows the table in note
             { 0, 10, 10, 0, 10, 5 },
             { 1, 1, 10, 0, 10, 5 },
             { 1, 5, 90, 0, 5, 5 },
             { 1, 1, 1, 0, 2,  5 },
-            { 1, 1, 4, 0, 184, 5 },
-            { 1, 1, 5, 0, 2, 595 }};
+            { 1, 1, 4, 0, 84, 5 },// 184
+            { 1, 1, 5, 0, 2, 95 }}; // 595
         private int earlyMorning[][] = { //follows the table in note
             { 0, 10, 10, 70, 10, 5 },
             { 1, 1, 10, 70, 10, 5 },
             { 1, 5, 90, 5, 5, 5 },
             { 1, 1, 1, 95, 2,  5 },
-            { 1, 1, 4, 7, 184, 5 },
-            { 1, 1, 5, 5, 2, 595 }};
+            { 1, 1, 4, 7, 84, 5 }, // 184
+            { 1, 1, 5, 5, 2, 95 }}; // 595
         private int morningNoClass[][] = { //follows the table in note
             { 0, 10, 10, 0, 10, 5 },
             { 1, 1, 9, 0, 10, 5 },
-            { 1, 1, 190, 0, 5, 5 },
+            { 1, 1, 90, 0, 5, 5 }, // 190
             { 1, 1, 1, 0, 2,  5 },
-            { 1, 1, 4, 0, 150, 5 },
-            { 5, 2, 7, 0, 2, 380 }};
+            { 1, 1, 4, 0, 50, 5 }, // 150
+            { 5, 2, 7, 0, 2, 80 }}; // 380
         private int morning[][] = { //follows the table in note
             { 0, 10, 10, 70, 10, 5 },
             { 1, 1, 9, 70, 10, 5 },
-            { 1, 1, 190, 5, 5, 5 },
+            { 1, 1, 90, 5, 5, 5 }, // 190
             { 1, 1, 1, 95, 2,  5 },
-            { 1, 1, 4, 7, 150, 5 },
-            { 5, 2, 7, 10, 2, 380 }};
+            { 1, 1, 4, 7, 50, 5 }, // 150
+            { 5, 2, 7, 10, 2, 80 }}; // 380
         private int afternoonNoClass[][] = {//follows the table in note
             { 0, 5, 5, 0, 5, 57},
             { 6, 1, 6, 0, 10,  66},
-            { 6, 3, 146, 0, 3, 20 },
+            { 6, 3, 76, 0, 3, 20 },
             { 1, 1, 1, 0, 2,  76 },
             { 1, 1, 1, 0, 75, 9 },
             { 1, 1, 19, 0, 19, 95 } };
         private int afternoon[][] = {//follows the table in note
             { 0, 5, 5, 39, 5, 57},
             { 6, 1, 6, 46, 10,  66},
-            { 6, 3, 146, 6, 3, 20 },
+            { 6, 3, 76, 6, 3, 20 },
             { 1, 1, 1, 72, 2,  76 },
             { 1, 1, 1, 1, 75, 9 },
             { 1, 1, 19, 39, 19, 95 } };
@@ -194,26 +180,30 @@ public class MultiState extends MovementModel {
 
         private int[] getProb(int state) {
             // System.out.println(SimClock.getTime());
+            //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
             int time = SimClock.getIntTime();
 
-            //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
-            // TODO Align the time!
-            // TODO Don't enter classroom between 10:30-11:45
-            //DONE. VERIFY!
-            if (time > 750 && time < 2625)
+            // simulation time: 08:00 - 18:00
+            //if (time > 750 && time < 2625)
+            if (time >= 6 && time < 21) // Don't enter classroom between 08:30-09:45
                 return earlyMorningNoClass[state];
-            else if (time < 1500)
+            //else if (time < 1500)
+            else if (time < 24) // before 10:00
                 return earlyMorning[state];
-            else if (time < ( SimScenario.getInstance().getEndTime() / 2))
+            else if (time >= 30 && time < 45) // Don't enter classroom between 10:30-11:45
+                return morningNoClass[state];
+            else if (time < 48) // before 12:00
                 return morning[state];
-            else {
-                //System.out.println("using afternoon time");
+            // Don't enter classroom between 12:30 - 13:45 or 14:30 - 15:45 or 16:30 - 17:45 
+            else if (time >= 54 && time < 69 || time >= 66 && time < 81 || time >= 78 && time < 93) 
+                return afternoonNoClass[state];
+            else 
                 return afternoon[state];
-            }
+            
         }
 
         public State getNextState(State currentState) {
-            // TODO further improve the efficiency z.B. precalculate total
+            // todo further improve the efficiency z.B. precalculate total
             int total = 0;
             int probs[] = getProb(currentState.getNumVal());
             
@@ -248,9 +238,20 @@ public class MultiState extends MovementModel {
                 case TOILET: return new Coord(ThreadLocalRandom.current().nextInt(740, 760 + 1),ThreadLocalRandom.current().nextInt(290, 310 + 1));
                 case LEISURE: return new Coord(ThreadLocalRandom.current().nextInt(500, 700 + 1),ThreadLocalRandom.current().nextInt(300, 330 + 1));
                 case CLASSROOM: return getClassroomCoord();
-                case LIBRARY: return new Coord(ThreadLocalRandom.current().nextInt(290, 350 + 1),ThreadLocalRandom.current().nextInt(290, 310 + 1));
+                case LIBRARY: return new Coord(ThreadLocalRandom.current().nextInt(290, 350 + 1),ThreadLocalRandom.current().nextInt(310, 340 + 1));
                 default: return new Coord(ThreadLocalRandom.current().nextInt(800, 825 + 1),ThreadLocalRandom.current().nextInt(315, 335 + 1));
             }
         }
     }
 }
+        //final double endTime = SimScenario.getInstance().getEndTime();
+        //Timetable for pause time (Repeats every hour)
+        //Scenario Time: 6000
+        //Classroom: 10:15-11:45
+        //Cafe: 10:10-10:20 and 10:40-10:50
+        //Toilet: None
+        //Leisure: 10:10-10:30 and 10:40-11:00
+        //Library: 10:00-10:20 and 10:30-10:50
+        //blockTime of 1 hour, i.e., 1500
+        //final double blockTime = curTime % 1500;        
+        // Update state machine every time we pick a path

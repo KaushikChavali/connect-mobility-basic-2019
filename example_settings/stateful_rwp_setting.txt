@@ -1,7 +1,7 @@
 # Settings for StatefulRwp where nodes have a state that influences mobility.
 
 Scenario.name = StatefulRwp
-Scenario.endTime = 6000
+Scenario.endTime = 120
 Scenario.updateInterval = 1
 Scenario.simulateConnections = true
 MovementModel.worldSize = 1000,1000
