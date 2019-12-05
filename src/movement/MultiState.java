@@ -28,13 +28,15 @@ public class MultiState extends MovementModel {
     }
 
     // TODO Align the time!
+    //DONE. VERIFY!
+    //10 minutes equals 250 time units in the simulation
     private int getInterval() {
         switch (state.getNumVal()) {
-            case 0: return 100; //10 minutes
-            case 1: return 100; //10 minutes
-            case 2: return 200;
-            case 3: return 900; //90 minutes UNUSED
-            case 4: return 600; //60 minutes
+            case 0: return 250; //CAFE 10 minutes
+            case 1: return 250; //TOILET 10 minutes
+            case 2: return 500; //LEISURE 20 minutes
+            case 3: return 4500; //CLASSROOM 90 minutes UNUSED
+            case 4: return 750; //LIBRARY 30 minutes
             default: return 0;
         }
     }
@@ -62,6 +64,7 @@ public class MultiState extends MovementModel {
         // Update state machine every time we pick a path
         
         // TODO Align the time!
+        //DONE. VERIFY!
 
         if (this.state == State.CLASSROOM) { 
             if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
@@ -194,9 +197,10 @@ public class MultiState extends MovementModel {
             int time = SimClock.getIntTime();
 
             //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
-            // TODO Don't enter classroom between 10:30-11:45
             // TODO Align the time!
-            if (time > 750 && time < 1500)
+            // TODO Don't enter classroom between 10:30-11:45
+            //DONE. VERIFY!
+            if (time > 750 && time < 2625)
                 return earlyMorningNoClass[state];
             else if (time < 1500)
                 return earlyMorning[state];

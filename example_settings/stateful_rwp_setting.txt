@@ -9,7 +9,7 @@ Events.nrof = 0
 
 # Communication Interface
 myInterface.type = SimpleBroadcastInterface
-myInterface.transmitRange = 50
+myInterface.transmitRange = 5
 myInterface.transmitSpeed = 1
 
 # Groups
@@ -17,7 +17,7 @@ Scenario.nrofHostGroups = 2
 
 # Group of students
 Group1.groupID = x
-Group1.nrofHosts = 90
+Group1.nrofHosts = 190
 Group1.nrofInterfaces = 1
 Group1.interface1 = myInterface
 Group1.movementModel = MultiState
