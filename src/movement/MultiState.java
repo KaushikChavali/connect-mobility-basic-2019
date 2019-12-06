@@ -76,7 +76,7 @@ public class MultiState extends MovementModel {
             p.addWaypoint(c);
             this.lastWaypoint = c;
        
-        } else {
+        } else { // Stay at same place
             this.cutTime();
             p.addWaypoint(lastWaypoint.clone());
         }
@@ -131,47 +131,47 @@ public class MultiState extends MovementModel {
         // todo further improve the efficiency
         // CAFE(0), TOILET(1), LEISURE(2), CLASSROOM(3), LIBRARY(4), ENTRANCE(5);
         private int earlyMorningNoClass[][] = { //follows the table in note
-            { 0, 10, 10, 0, 10, 5 },
-            { 1, 1, 10, 0, 10, 5 },
-            { 1, 5, 90, 0, 5, 5 },
-            { 1, 1, 1, 0, 2,  5 },
-            { 1, 1, 4, 0, 84, 5 },// 184
-            { 1, 1, 5, 0, 2, 95 }}; // 595
+            { 1, 10, 10, 0, 10, 5 },
+            { 10, 1, 10, 0, 10, 5 },
+            { 1, 5, 79, 0, 5, 5 },
+            { 1, 5, 5, 0, 2,  5 },
+            { 1, 1, 10, 0, 70, 5 },
+            { 1, 1, 5, 0, 2, 86 }}; 
         private int earlyMorning[][] = { //follows the table in note
-            { 0, 10, 10, 70, 10, 5 },
-            { 1, 1, 10, 70, 10, 5 },
-            { 1, 5, 90, 5, 5, 5 },
-            { 1, 1, 1, 95, 2,  5 },
-            { 1, 1, 4, 7, 84, 5 }, // 184
-            { 1, 1, 5, 5, 2, 95 }}; // 595
+            { 1, 10, 10, 64, 10, 5 },
+            { 10, 1, 10, 64, 10, 5 },
+            { 1, 5, 79, 5, 5, 5 },
+            { 1, 2, 3, 90, 2, 2 },
+            { 1, 1, 10, 13, 70, 5 },
+            { 1, 1, 5, 5, 2, 86 }}; 
         private int morningNoClass[][] = { //follows the table in note
-            { 0, 10, 10, 0, 10, 5 },
-            { 1, 1, 9, 0, 10, 5 },
-            { 1, 1, 90, 0, 5, 5 }, // 190
-            { 1, 1, 1, 0, 2,  5 },
-            { 1, 1, 4, 0, 50, 5 }, // 150
-            { 5, 2, 7, 0, 2, 80 }}; // 380
+            { 1, 10, 10, 0, 10, 5 },
+            { 10, 1, 10, 0, 10, 5 },
+            { 1, 5, 79, 0, 5, 5 }, 
+            { 5, 5, 15, 0, 5,  5 },
+            { 1, 1, 10, 0, 70, 5 }, 
+            { 2, 2, 5, 0, 2, 80 }}; 
         private int morning[][] = { //follows the table in note
-            { 0, 10, 10, 70, 10, 5 },
-            { 1, 1, 9, 70, 10, 5 },
-            { 1, 1, 90, 5, 5, 5 }, // 190
-            { 1, 1, 1, 95, 2,  5 },
-            { 1, 1, 4, 7, 50, 5 }, // 150
-            { 5, 2, 7, 10, 2, 80 }}; // 380
+            { 1, 10, 10, 64, 10, 5 },
+            { 10, 1, 10, 64, 10, 5 },
+            { 1, 5, 79, 5, 5, 5 }, 
+            { 5, 5, 15, 65, 5,  5 },
+            { 1, 1, 10, 13, 70, 5 }, 
+            { 2, 2, 5, 9, 2, 80 }}; 
         private int afternoonNoClass[][] = {//follows the table in note
-            { 0, 5, 5, 0, 5, 57},
-            { 6, 1, 6, 0, 10,  66},
-            { 6, 3, 76, 0, 3, 20 },
-            { 1, 1, 1, 0, 2,  76 },
-            { 1, 1, 1, 0, 20, 9 },
-            { 1, 1, 19, 0, 5, 95 } };
+            { 0, 5, 5, 0, 5, 40},
+            { 6, 1, 6, 0, 10, 31},
+            { 1, 3, 70, 0, 3, 20 },
+            { 1, 1, 3, 0, 2, 43},
+            { 1, 1, 9, 0, 30, 39 },
+            { 1, 1, 1, 0, 1, 90}};
         private int afternoon[][] = {//follows the table in note
-            { 0, 5, 5, 39, 5, 57},
-            { 6, 1, 6, 46, 10,  66},
-            { 6, 3, 76, 6, 3, 20 },
-            { 1, 1, 1, 72, 2,  76 },
-            { 1, 1, 1, 1, 20, 9 },
-            { 1, 1, 19, 39, 5, 95 } };
+            { 0, 5, 5, 45, 5, 40},
+            { 6, 1, 6, 46, 10, 31},
+            { 1, 3, 70, 3, 3, 20 },
+            { 1, 1, 3, 50, 2, 43},
+            { 1, 1, 9, 20, 30, 39 },
+            { 1, 1, 1, 6, 1, 90}};
 
 
         public WaypointTable(){ }
@@ -240,14 +240,3 @@ public class MultiState extends MovementModel {
         }
     }
 }
-        //final double endTime = SimScenario.getInstance().getEndTime();
-        //Timetable for pause time (Repeats every hour)
-        //Scenario Time: 6000
-        //Classroom: 10:15-11:45
-        //Cafe: 10:10-10:20 and 10:40-10:50
-        //Toilet: None
-        //Leisure: 10:10-10:30 and 10:40-11:00
-        //Library: 10:00-10:20 and 10:30-10:50
-        //blockTime of 1 hour, i.e., 1500
-        //final double blockTime = curTime % 1500;        
-        // Update state machine every time we pick a path

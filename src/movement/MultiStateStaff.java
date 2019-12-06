@@ -69,7 +69,7 @@ public class MultiStateStaff extends MovementModel {
             p.addWaypoint(c);
             this.lastWaypoint = c;
        
-        } else {
+        } else { // Stay at same place
             this.cutTime();
             p.addWaypoint(lastWaypoint.clone());
         }
@@ -125,17 +125,17 @@ public class MultiStateStaff extends MovementModel {
         // todo further improve the efficiency
         // CAFE(0), TOILET(1), LEISURE(2), OFFICE(3), ENTRANCE(4);
         private int morning[][] = { //follows the table in note
-            { 0, 10, 5, 80, 5 },
-            { 5, 1, 5, 80, 3 },
-            { 5, 1, 10, 80, 5 },
-            { 1, 1, 1, 95, 1 },
-            { 3, 1, 2, 5, 80 }};
+            { 0, 4, 11, 80, 5 },
+            { 3, 1, 11, 80, 5 },
+            { 3, 1, 11, 80, 5 },
+            { 1, 1, 12, 85, 1 },
+            { 7, 3, 10, 15, 65 }};
         private int afternoon[][] = {//follows the table in note
-            { 0, 10, 5, 1, 80 },
-            { 5, 1, 5, 3, 80 },
-            { 5, 1, 10, 5, 80 },
-            { 1, 1, 1, 1, 95 },
-            { 1, 0, 1, 1, 90 }};
+            { 0, 4, 5, 1, 90 },
+            { 3, 1, 3, 3, 90 },
+            { 3, 1, 5, 5, 86 },
+            { 1, 1, 1, 15, 82 },
+            { 0, 0, 0, 0, 100 }};
 
 
         public WaypointTable(){ }
