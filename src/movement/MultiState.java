@@ -42,21 +42,19 @@ public class MultiState extends MovementModel {
 
     @Override
     public Path getPath() {
-        Path p;
-        p = new Path(100*generateSpeed());
+        Path p = new Path(100*generateSpeed());
         
-        final double curTime = SimClock.getTime();
         // Simulation time 08:00-18:00
         // Each time unit = 5 minutes
 
         if (this.state == State.CLASSROOM) { 
-            //if (curTime < 375 || curTime > 2625 && curTime < 3375 || curTime > 5625) { // If lecture over
+            final double curTime = SimClock.getTime();
             // If lecture is over -0815 or 0945-1015 or 1145-1215 or 1345-1415 or 1545-1615 or 1745-
             if (curTime < 3 || curTime >= 21 && curTime < 27 || curTime >= 45 && curTime < 51
                     || curTime >= 69 && curTime < 75 || curTime >= 93 && curTime < 99 || curTime >= 117) {
                 this.state = waypointTable.getNextState(this.state);
                 this.pauseTime = getInterval();
-                //System.out.println("Lecture is over, going to: " + this.state);
+                // System.out.println("Lecture is over, going to: " + this.state);
 
                 // Create the path
                 p.addWaypoint(lastWaypoint.clone());
@@ -70,7 +68,7 @@ public class MultiState extends MovementModel {
                 
             this.state = waypointTable.getNextState(this.state);
             this.pauseTime = getInterval();
-            //System.out.println("Time's up, going to: " + this.state);
+            // System.out.println("Time's up, going to: " + this.state);
         
             // Create the path
             p.addWaypoint(lastWaypoint.clone());
@@ -180,14 +178,12 @@ public class MultiState extends MovementModel {
 
         private int[] getProb(int state) {
             // System.out.println(SimClock.getTime());
-            //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
+            // System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
             int time = SimClock.getIntTime();
 
             // simulation time: 08:00 - 18:00
-            //if (time > 750 && time < 2625)
             if (time >= 6 && time < 21) // Don't enter classroom between 08:30-09:45
                 return earlyMorningNoClass[state];
-            //else if (time < 1500)
             else if (time < 24) // before 10:00
                 return earlyMorning[state];
             else if (time >= 30 && time < 45) // Don't enter classroom between 10:30-11:45

@@ -27,28 +27,25 @@ public class MultiStateStaff extends MovementModel {
             this.pauseTime--;            
     }
 
+    //Variable pause time implementation
     private int getInterval() {
         switch (state.getNumVal()) {
-            case 0: return 100; //10 minutes
-            case 1: return 500; //5 minutes
-            case 2: return 200;
-            case 3: return 900; //90 minutes UNUSED
+            case 0: return 2; //10 minutes
+            case 1: return 1; //5 minutes
+            case 2: return 6;
+            case 3: return 18; //90 minutes UNUSED
             default: return 0;
         }
     }
 
     @Override
     public Path getPath() {
-        Path p;
-        p = new Path(generateSpeed());
-        
-        //Variable pause time implementation
-        final double curTime = SimClock.getTime();
- 
-        // Update state machine every time we pick a path
+        Path p = new Path(100*generateSpeed());
 
         if (this.state == State.OFFICE) { 
-            if (curTime < 375 || curTime > 2625 && curTime < 3750 || curTime > 5625) { // If office time over
+            final double curTime = SimClock.getTime();
+            // If office time is over -0830 or 1145-1245 or 1645-
+            if (curTime < 6 || curTime >= 45 && curTime < 57 || curTime >= 105) {
                 this.state = waypointTable.getNextState(this.state);
                 this.pauseTime = getInterval();
                 //System.out.println("going to: " + this.state);
@@ -132,7 +129,7 @@ public class MultiStateStaff extends MovementModel {
             { 5, 1, 5, 80, 3 },
             { 5, 1, 10, 80, 5 },
             { 1, 1, 1, 95, 1 },
-            { 3, 1, 2, 5, 82 }};
+            { 3, 1, 2, 5, 80 }};
         private int afternoon[][] = {//follows the table in note
             { 0, 10, 5, 1, 80 },
             { 5, 1, 5, 3, 80 },
@@ -144,11 +141,10 @@ public class MultiStateStaff extends MovementModel {
         public WaypointTable(){ }
 
         private int[] getProb(int state) {
-            // System.out.println(SimClock.getTime());
             int time = SimClock.getIntTime();
 
-            //System.out.println(time + " < " + SimScenario.getInstance().getEndTime() / 2);
-            if (time < 5650)
+            //if (time < 5650)
+            if (time < 60) // before 13:00
                 return morning[state];
             else {
                 return afternoon[state];
@@ -192,7 +188,6 @@ public class MultiStateStaff extends MovementModel {
                 case TOILET: return new Coord(ThreadLocalRandom.current().nextInt(740, 760 + 1),ThreadLocalRandom.current().nextInt(290, 310 + 1));
                 case LEISURE: return new Coord(ThreadLocalRandom.current().nextInt(500, 700 + 1),ThreadLocalRandom.current().nextInt(300, 330 + 1));
                 case OFFICE: return getOfficeCoord();
-                //case LIBRARY: return new Coord(ThreadLocalRandom.current().nextInt(290, 350 + 1),ThreadLocalRandom.current().nextInt(290, 310 + 1));
                 default: return new Coord(ThreadLocalRandom.current().nextInt(800, 825 + 1),ThreadLocalRandom.current().nextInt(315, 335 + 1));
             }
         }
