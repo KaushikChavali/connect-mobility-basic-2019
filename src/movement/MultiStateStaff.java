@@ -143,7 +143,6 @@ public class MultiStateStaff extends MovementModel {
         private int[] getProb(int state) {
             int time = SimClock.getIntTime();
 
-            //if (time < 5650)
             if (time < 60) // before 13:00
                 return morning[state];
             else {
