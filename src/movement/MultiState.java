@@ -24,10 +24,8 @@ public class MultiState extends MovementModel {
             this.pauseTime = getInterval();
         else 
             this.pauseTime--;            
-        //System.out.println("cuttime:" + this.pauseTime);//
     }
 
-    //10 minutes equals 250 time units in the simulation
     //5 minutes equals 1 time unit in the simulation
     private int getInterval() {
         switch (state.getNumVal()) {
